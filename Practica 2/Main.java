@@ -1,10 +1,11 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.Line2D;
 
 class Punto {
-    public float x, y;
+    double x, y;
 
-    public Punto(float x, float y) {
+    public Punto(double x, double y) {
         this.x = x;
         this.y = y;
     }
@@ -15,7 +16,7 @@ class Punto {
 }
 
 class Linea {
-    public Punto p1, p2;
+    Punto p1, p2;
 
     public Linea(Punto p1, Punto p2) {
         this.p1 = p1;
@@ -25,62 +26,61 @@ class Linea {
     public String toString() {
         return "Línea desde " + p1 + " hasta " + p2;
     }
+
+    public void dibujaLinea(Graphics g) {
+        g.setColor(Color.RED);
+        g.drawLine((int) p1.x , (int) p1.y, 
+                   (int) p2.x, (int) p2.y);
+    }
 }
 
 class Circulo {
-    public Punto centro;
-    public float radio;
+    Punto centro;
+    double radio;
 
-    public Circulo(Punto c, float r) {
-        this.centro = c;
-        this.radio = r;
+    public Circulo(Punto centro, double radio) {
+        this.centro = centro;
+        this.radio = radio;
     }
 
     public String toString() {
         return "Círculo con centro en " + centro + " y radio " + String.format("%.2f", radio);
     }
-}
- 
-class Dibujo extends JPanel {
-    private Linea linea;
-    private Circulo circulo;
 
-    public Dibujo(Linea linea, Circulo circulo) {
-        this.linea = linea;
-        this.circulo = circulo;
-    }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
+    public void dibujaCirculo(Graphics g) {
         g.setColor(Color.BLUE);
-
-         
-        g.drawLine((int) linea.p1.x * 50 + 100, (int) linea.p1.y * 50 + 100, 
-                   (int) linea.p2.x * 50 + 100, (int) linea.p2.y * 50 + 100);
-
-         
-        g.setColor(Color.RED);
-        int radioEscalado = (int) circulo.radio * 50;
-        g.drawOval((int) circulo.centro.x * 50 + 100 - radioEscalado, 
-                   (int) circulo.centro.y * 50 + 100 - radioEscalado, 
+        int radioEscalado = (int) radio;
+        g.drawOval((int) centro.x, 
+                   (int) centro.y, 
                    radioEscalado * 2, radioEscalado * 2);
     }
 }
- 
-public class Main {
-    public static void main(String[] args) {
-        Punto p1 = new Punto(0.0f, 3.0f);
-        Punto p2 = new Punto(4.0f, 7.0f);
-        Linea linea = new Linea(p1, p2);
-        Circulo circulo = new Circulo(p1, 5.0f);
 
-        // Crear la ventana
-        JFrame frame = new JFrame("Dibujo en Java");
-        Dibujo dibujo = new Dibujo(linea, circulo);
-        frame.add(dibujo);
-        frame.setSize(400, 400);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
+public class Graficos extends JPanel {
+    
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        //Atributos de punto, línea y círculo
+        Punto p1 = new Punto(5, 5);
+        Punto p2 = new Punto(5, 5);
+        Linea linea = new Linea(p1, p2);
+        Circulo circulo = new Circulo(p1, 5);
+
+        // Mostrar información consola
+        System.out.println(linea);
+        System.out.println(circulo);
+
+        // Dibujar la línea y el círculo
+        linea.dibujaLinea(g);
+        circulo.dibujaCirculo(g);
+    }
+
+    public static void main(String[] args) {
+        // Configuración de la ventana
+        JFrame ventana = new JFrame("Gráfico de Línea y Círculo");
+        ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        ventana.setSize(600, 600);
+        ventana.add(new Graficos());
+        ventana.setVisible(true);
     }
 }

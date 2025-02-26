@@ -27,11 +27,13 @@ class Linea:
         return "Línea desde {} hasta {}".format(self.p1, self.p2)
 
     def dibujaLinea(self):
-        plt.plot([self.p1.x, self.p2.x], [self.p1.y, self.p2.y], marker="o")
+        plt.figure()
+        plt.plot([self.p1.x, self.p2.x], [self.p1.y, self.p2.y], marker="o", color="r", label="Línea")
         plt.xlabel("X")
         plt.ylabel("Y")
         plt.title("Dibujo de Línea")
         plt.grid(True)
+        plt.legend()
         plt.show()
 
 class Circulo:
@@ -44,23 +46,26 @@ class Circulo:
 
     def dibujaCirculo(self):
         fig, ax = plt.subplots()
-        circulo = plt.Circle((self.centro.x, self.centro.y), self.radio, fill=False, edgecolor="b")
+        circulo = plt.Circle((self.centro.x, self.centro.y), self.radio, fill=False, edgecolor="b", label="Círculo")
         ax.add_patch(circulo)
-        plt.xlim(self.centro.x - self.radio - 1, self.centro.x + self.radio + 1)
-        plt.ylim(self.centro.y - self.radio - 1, self.centro.y + self.radio + 1)
+        ax.set_xlim(self.centro.x - self.radio - 1, self.centro.x + self.radio + 1)
+        ax.set_ylim(self.centro.y - self.radio - 1, self.centro.y + self.radio + 1)
+        ax.set_aspect('equal', adjustable='datalim')
         plt.xlabel("X")
         plt.ylabel("Y")
         plt.title("Dibujo de Círculo")
         plt.grid(True)
-        plt.gca().set_aspect('equal', adjustable='datalim')
+        plt.legend(["Círculo"])
         plt.show()
 
 
-p1 = Punto(0, 3)
-p2 = Punto(4, 7)
+#punto
+p1 = Punto(0, 0)
+p2 = Punto(5, 5)
 linea = Linea(p1, p2)
 circulo = Circulo(p1, 5)
 
+#Información de los gráficos por separado
 print(linea)
 linea.dibujaLinea()
 
